@@ -4,7 +4,7 @@ exe:
 	raco exe blendy.rkt
 
 clean:
-	${RM} *.png *~ blendy
+	${RM} *.png *.gif *~ blendy
 
 
 

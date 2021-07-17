@@ -69,7 +69,7 @@
         (send im-c save-file (name i n) 'png)))))
 
 ;; テスト。
-(blend-n 10 "../images/white.png" "../images/virus.png")
+;;(blend-n 10 "../images/cat.png" "../images/virus.png")
 
 ;; ターミナルから関数を呼べるように。
 ;; 引数の個数を見てるだけ。手抜き。
@@ -87,4 +87,4 @@
          (else (printf "usage: blendy [n] im-a im-b"))))))
 
 ;; 本番。ターミナルからの起動は blendy 10 a.png b.png のように。
-;;(main)
+(main)
