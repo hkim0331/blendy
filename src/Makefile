@@ -14,6 +14,3 @@ clean:
 realclean:
 	make clean
 	${RM} blendy
-
-
-
