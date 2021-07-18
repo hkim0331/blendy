@@ -16,6 +16,9 @@ Windows スタイルの「単一のアプリで全部済ます」から、Linux 
 
 ## Unrelease
 
+## 0.1.4 - 2021-07-18
+- run.sh 追加。
+
 ## 0.1.3 - 2021-07-18
 ### Changed
 - README.md 改善。
