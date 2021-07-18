@@ -1,11 +1,10 @@
 #!/usr/bin/env racket
 #lang racket
-;; Produce interpose GIF images between image-a and image-b.
-;; Those files can be used as animation-gif stuffs.
+;; Produce intermetidate GIF images between image-a and image-b.
+;; The output files can be used as stuffs for animation-GIF.
 ;; You can easily change the output format, PNG or JPG.
 ;; I'd like my Japanese students to read this code,
-;; So I chose Japanese to comment on functions.
-;;
+;; So I chose Japanese to comment on my functions.
 ;; programmed by hkimura, 2021-07-16.
 
 (require racket/draw)
@@ -17,7 +16,7 @@
       (send im get-argb-pixels x y 1 1 px)
       px)))
 
-;; イメージ im の位置 (x,y)のピクセルを px とする。
+;; イメージ im の位置 (x,y) のピクセルを px で書き換える。
 (define put-px!
   (lambda (px x y im)
     (send im set-argb-pixels x y 1 1 px)))
@@ -43,18 +42,27 @@
         (format "0~a.png" i)
         (format "~a.png" i))))
 
+;; 0.2.0 ファイルの存在を確認する。
+;; 拡張子を確認した方が安全だが、それは次のバージョンで。
+(define find-file
+ (lambda (path)
+  (if (file-exists? path)
+   (make-object bitmap% path)
+   (error (format "error: did not find ~a." path)))))
+
 ;; file-a のイメージから file-b のイメージまで n ステップの中間イメージを作る。
 ;; file-a と file-b のイメージは縦横同じピクセル数であること。
-;; 効率を無視し、ピクセルごとにループ。ださいが、このほうが読みやすいだろ。
-;; イメージがピクセルからなり、
-;; カラーのピクセルが RGBA の 4 バイトってことを理解すればこの
-;; この関数は理解できるだろう。
+;; 効率を無視し、ピクセルごとにループ。ださいが、このほうが読みやすいだろう。
+;; イメージが複数のピクセルからなり、
+;; ピクセルは２次元的に配置しており、
+;; カラーのピクセルが RGBA の 4 バイトってことを理解すれば、
+;; この関数は理解できる。
 (define blend-n
   (lambda (n file-a file-b)
-    (let* ((im-a (make-object bitmap% file-a))
+    (let* ((im-a (find-file file-a))
            (width (send im-a get-width))
            (height (send im-a get-height))
-           (im-b (make-object bitmap% file-b))
+           (im-b (find-file file-b))
            (im-c (make-object bitmap% width height))
            (px-a (make-bytes 4))
            (px-b (make-bytes 4))
@@ -86,5 +94,9 @@
                               (vector-ref args 2)))
          (else (printf "usage: blendy [n] im-a im-b"))))))
 
-;; 本番。ターミナルからの起動は blendy 10 a.png b.png のように。
+;; 本番。ターミナルからの起動は、
+;; blendy a.png b.png
+;; もしくは、
+;; blendy 20 a.png b.png
+;; のように。
 (main)
