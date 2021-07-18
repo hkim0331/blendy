@@ -39,20 +39,23 @@
 (define name
   (lambda (i n)
     (if (< i 10)
-        (format "0~a.png" i)
-        (format "~a.png" i))))
+      (format "0~a.png" i)
+      (format "~a.png" i))))
 
-;; 0.2.0 ファイルの存在を確認する。
+;; イメージファイルの存在を確認する。
+;; 見つかった時はファイルを開いてビットマップオブジェクトを返す。
+;; 見つからない時はエラー終了する
 ;; 拡張子を確認した方が安全だが、それは次のバージョンで。
 (define find-file
- (lambda (path)
-  (if (file-exists? path)
-   (make-object bitmap% path)
-   (error (format "error: did not find ~a." path)))))
+  (lambda (path)
+    (if (file-exists? path)
+      (make-object bitmap% path)
+      (error (format "error: did not find ~a." path)))))
 
 ;; file-a のイメージから file-b のイメージまで n ステップの中間イメージを作る。
-;; file-a と file-b のイメージは縦横同じピクセル数であること。
+;; イメージは縦横同じピクセル数であること。
 ;; 効率を無視し、ピクセルごとにループ。ださいが、このほうが読みやすいだろう。
+;; 逆にいうと、スピードアップの余地はある。
 ;; イメージが複数のピクセルからなり、
 ;; ピクセルは２次元的に配置しており、
 ;; カラーのピクセルが RGBA の 4 バイトってことを理解すれば、
@@ -76,11 +79,11 @@
             (put-px! px-c x y im-c)))
         (send im-c save-file (name i n) 'png)))))
 
-;; テスト。
-;;(blend-n 10 "../images/cat.png" "../images/virus.png")
+;; テスト。racket いいねー。
+;; (blend-n 10 "../images/cat.png" "../images/virus.png")
 
 ;; ターミナルから関数を呼べるように。
-;; 引数の個数を見てるだけ。手抜き。
+;; 引数の個数を見るだけの手抜き。
 (define main
   (lambda ()
     (let* ((args (current-command-line-arguments))
