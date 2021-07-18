@@ -6,13 +6,14 @@ blendy from.png to.png で、
 from.png と to.png とをピクセルごとにで移動平均(?)した
 00.png ~ 09.png を作る。
 
-OpenCV/Clojure で書きたいところだが、
+OpenCV/Clojure でプログラム作成したいところだが、
 開発機の m1-mac と本番機の intel-ubuntu とで
-OpenCV ライブラリのバージョンを合わせるのは面倒だ。
+OpenCV ライブラリのバージョンを合わせるのは面倒。
 
 なので、OpenCV 使わない作戦に出る。
 racket/draw でやっつけよう。
 一部の学生に `racket 勉強してみろ` 焚き付けているので好適。
+blendy.rkt はコメント入れても 100 行足らずのショートプログラム。
 
 ## usage
 
@@ -38,6 +39,13 @@ racket/draw でやっつけよう。
 
 ## build
 
+blendy.rkt のあるフォルダに移動し、
+racket インタプリタで以下のように呼び出す。
+
+```
+  $ racket blendy.rkt from.png to.png
+```
+
 ~/bin 等に置いておくスタンドアロンのコマンドがほしい場合は、
 raco exe でビルドする。
 
@@ -46,24 +54,32 @@ raco exe でビルドする。
   $ mv blendy ~/bin
 ```
 
-ビルドしないときは、racket インタプリタで以下のように呼び出す。
+こうすると、作業ディレクトリがどこであっても blendy を起動できるようになる。
 
-```
-  $ racket blendy.rkt from.png to.png
-```
+ビルドした blendy は起動のために racket インタプリタを必要としない。
+racket をインストールしてない隣人に blendy だけコピーしてあげれば、
+その隣人は自分の ubuntu で blendy を起動できるようになる。
+intel-linux であれば ubuntu じゃなくても起動できる（と思う、未確認）。
 
 ## demo
 
 images/フォルダに cat.png、virus.png 置いてある。
 いずれも mac の絵文字をキャプチャしたもの。
+ターミナルで以下のようにコマンドを実行すると anime.gif が得られる。
 
 ```sh
-$ make clean
+$ rm -f *.gif
 $ racket blendy.rkt ../images/cat.png ../images/virus.png
 $ ./png-to-gif.sh
 $ gifsicle --colors 256 -l10 *.gif -o anime.gif
 ```
 png-to-gif.sh の中身は、、、ファイル開いて読んでみよう。
+
+もしくは、次の１行で。
+
+```sh
+$ make clean all
+```
 
 ## Legal
 
