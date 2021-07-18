@@ -2,18 +2,14 @@
 
 2021 情報リテラシー授業用デモプログラム。
 
-blendy from.png to.png で、
-from.png と to.png とをピクセルごとにで移動平均(?)した
-00.png ~ 09.png を作る。
+プログラムの内容はわからなくていい。わからないはず。
 
-OpenCV/Clojure でプログラム作成したいところだが、
-開発機の m1-mac と本番機の intel-ubuntu とで
-OpenCV ライブラリのバージョンを合わせるのは面倒。
+Windows スタイルの「単一のアプリで全部済ます」から、Linux スタイルの
+「小さいコマンドを組み合わせて作業を進める、コマンドが足りなかったら自分で作る」
+の具体例を見せる。
 
-なので、OpenCV 使わない作戦に出る。
-racket/draw でやっつけよう。
-一部の学生に `racket 勉強してみろ` 焚き付けているので好適。
-blendy.rkt はコメント入れても 100 行足らずのショートプログラム。
+「Scheme の手習い」読んでる学生の励みになるよう、
+racket/draw でやっつける。
 
 ## usage
 
@@ -22,13 +18,15 @@ blendy.rkt はコメント入れても 100 行足らずのショートプログ�
 ```sh
 $ racket blendy.rkt start.png end.png
 ```
-で、10 ステップの 00.png ~ 09.png を作るので、あとは gifsicle 等で gif アニメにする。
+で、10 ステップの 00.png ~ 09.png を作る。
+あとは gifsicle で gif アニメにする。
 
-* KISS (Keep It Simple, Stupid) の精神にのっとり、中間ファイルを作ることだけに専念する。
+* KISS (Keep It Simple, Stupid) の精神にのっとり、
+  blendy.rkt は中間ファイルを作ることだけに専念する。
 
-* スタートイメージ、エンドイメージは png 以外、gif でも、jpg でも OK とする。
+* スタートイメージ、エンドイメージは gif, png, jpg でも OK とする。
 
-* 10 ステップ以外、例えば 20 ステップ行きたい時は、
+* 10 ステップ以外、例えば 20 ステップ行きたい時は次のように。
 
 ```sh
 $ racket blendy.rkt 20 start.jpg end.jpg
@@ -66,12 +64,13 @@ $ source ~/.profile
 
 こうすると、作業ディレクトリがどこであっても blendy を起動できるようになる。
 cp や source は一度実行すればよく、
-ubuntu をリブートしてもその効果は持続します。
+ubuntu をリブートしても効果は持続します。
 
 ## demo
 
 images/フォルダに cat.png、virus.png 置いてある。
 いずれも mac の絵文字をキャプチャしたもの。
+
 ターミナルで以下のようにコマンドを実行すると
 cat.png から virus.png へモルフィングする anime.gif を自動作成し、
 ubuntu のブラウザ firefox でそれを開く。
@@ -113,7 +112,7 @@ gifsicle --colors 256 -l3 *.gif -o $3
 firefox $3
 ```
 
-作ったプログラムを飲み込んださらに便利なプログラムを作ってみた。
+作ったプログラムを飲み込んだ、さらに便利なプログラムを作ってみた。
 
 
 ## Legal
