@@ -65,15 +65,26 @@ intel-linux であれば ubuntu じゃなくても起動できる（と思う、
 
 images/フォルダに cat.png、virus.png 置いてある。
 いずれも mac の絵文字をキャプチャしたもの。
-ターミナルで以下のようにコマンドを実行すると anime.gif が得られる。
+ターミナルで以下のようにコマンドを実行すると
+cat.png から virus.png へモルフィングする anime.gif を自動作成し、
+ubuntu のブラウザ firefox でそれを開く。
 
 ```sh
 $ rm -f *.gif
 $ racket blendy.rkt ../images/cat.png ../images/virus.png
 $ ./png-to-gif.sh
 $ gifsicle --colors 256 -l10 *.gif -o anime.gif
+$ firefox anime.gif
 ```
 png-to-gif.sh の中身は、、、ファイル開いて読んでみよう。
+
+run.sh は上の操作をファイルに記録したもの。
+
+```sh
+$ ./run.sh
+```
+
+で、何回でも繰り返せる。
 
 もしくは、次の１行で。
 
@@ -82,5 +93,7 @@ $ make clean all
 ```
 
 ## Legal
+
+コピーフリーです。
 
 Copyright © 2021 hkimura
