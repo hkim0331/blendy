@@ -20,16 +20,18 @@ blendy.rkt はコメント入れても 100 行足らずのショートプログ�
 サイズの同じスタートイメージ start.png とエンドイメージ end.png を用意して、
 
 ```sh
-  $ blendy start.png end.png
+$ racket blendy.rkt start.png end.png
 ```
 で、10 ステップの 00.png ~ 09.png を作るので、あとは gifsicle 等で gif アニメにする。
 
-* スタートイメージ、エンドイメージは png フォーマットでなくてもよい。gif でも、jpg でも。
+* KISS (Keep It Simple, Stupid) の精神にのっとり、中間ファイルを作ることだけに専念する。
 
-* 10 ステップ以外が希望の時は次のように。
+* スタートイメージ、エンドイメージは png 以外、gif でも、jpg でも OK とする。
+
+* 10 ステップ以外、例えば 20 ステップ行きたい時は、
 
 ```sh
-  $ blendy 20 start.jpg end.jpg
+$ racket blendy.rkt 20 start.jpg end.jpg
 ```
 
 ## note
@@ -39,27 +41,32 @@ blendy.rkt はコメント入れても 100 行足らずのショートプログ�
 
 ## build
 
-blendy.rkt のあるフォルダに移動し、
-racket インタプリタで以下のように呼び出す。
+racket には racket インタプリタを必要とせず、スタンドアロンで実行できるオブジェクトを
+生成する機能がある。リテラシーのレベルではこの文章を理解するのは無理だよね。言い換えよう。
 
-```
-  $ racket blendy.rkt from.png to.png
-```
+racket インタプリタを持たない人に、blendy をコピーしてプレゼントするにはこうする。
 
-~/bin 等に置いておくスタンドアロンのコマンドがほしい場合は、
-raco exe でビルドする。
+作業ディレクトリを src に合わせて、
 
 ```sh
-  $ raco exe blendy.rkt
-  $ mv blendy ~/bin
+$ raco exe blendy.rkt
+```
+
+出来上がる blendy (拡張子 .rkt がなくなっていることに注意）
+は racket をインストールしていない ubuntu でも起動できる。
+racket をインストールしてない隣人に blendy だけコピーしてあげれば、
+その隣人は自分の ubuntu で blendy を起動できるようになる。
+
+## path を通す
+
+```sh
+$ cp blendy ~/bin
+$ source ~/.profile
 ```
 
 こうすると、作業ディレクトリがどこであっても blendy を起動できるようになる。
-
-ビルドした blendy は起動のために racket インタプリタを必要としない。
-racket をインストールしてない隣人に blendy だけコピーしてあげれば、
-その隣人は自分の ubuntu で blendy を起動できるようになる。
-intel-linux であれば ubuntu じゃなくても起動できる（と思う、未確認）。
+cp や source は一度実行すればよく、
+ubuntu をリブートしてもその効果は持続します。
 
 ## demo
 
@@ -78,19 +85,36 @@ $ firefox anime.gif
 ```
 png-to-gif.sh の中身は、、、ファイル開いて読んでみよう。
 
-run.sh は上の操作をファイルに記録したもの。
+上の操作を run0.sh にコピーしよう（$ は剥ぎ取る必要あり）。
 
 ```sh
-$ ./run.sh
+$ ./run0.sh
 ```
 
 で、何回でも繰り返せる。
 
-もしくは、次の１行で。
+run0.sh は cat.png と virus.png を決め打ちで入力にしているのを、
+ターミナルからコマンドを打つときに指定できるように変更しよう。run.sh です。
+どこがどう変わったかをチェックしよう。
+
+... と書いても見ないやついるからな。出来上がり run.sh をコピペします。
 
 ```sh
-$ make clean all
+#!/bin/sh
+# usage:
+# $ ./run.sh im1 im2 out
+# example:
+# $ ./run.sh dog.png bird.png anime.gif
+
+rm -f *.gif
+racket blendy.rkt $1 $2
+./png-to-gif.sh
+gifsicle --colors 256 -l3 *.gif -o $3
+firefox $3
 ```
+
+作ったプログラムを飲み込んださらに便利なプログラムを作ってみた。
+
 
 ## Legal
 
