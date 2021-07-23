@@ -2,95 +2,124 @@
 
 2021 情報リテラシー授業用デモプログラム。
 
-blendy from.png to.png で、
-from.png と to.png とをピクセルごとにで移動平均(?)した
-00.png ~ 09.png を作る。
+Windows スタイルの「単一のアプリで全部済ます」から、Linux スタイルの
+「小さいコマンドを組み合わせて作業を進める、コマンドが足りなかったら自分で作る」
+の具体例を見せる。
 
-OpenCV/Clojure でプログラム作成したいところだが、
-開発機の m1-mac と本番機の intel-ubuntu とで
-OpenCV ライブラリのバージョンを合わせるのは面倒。
-
-なので、OpenCV 使わない作戦に出る。
-racket/draw でやっつけよう。
-一部の学生に `racket 勉強してみろ` 焚き付けているので好適。
-blendy.rkt はコメント入れても 100 行足らずのショートプログラム。
+「Scheme の手習い」読んでる学生の励みになるよう、
+racket/draw でやっつける。プログラムの内容はわからなくていい。わからないはず。
 
 ## usage
 
 サイズの同じスタートイメージ start.png とエンドイメージ end.png を用意して、
 
 ```sh
-  $ blendy start.png end.png
+$ racket blendy.rkt start.png end.png
 ```
-で、10 ステップの 00.png ~ 09.png を作るので、あとは gifsicle 等で gif アニメにする。
+で、10 ステップの 00.png ~ 09.png を作る。
 
-* スタートイメージ、エンドイメージは png フォーマットでなくてもよい。gif でも、jpg でも。
+* KISS (Keep It Simple, Stupid) の精神にのっとり、
+  blendy.rkt は中間ファイルを作ることだけに専念する。
 
-* 10 ステップ以外が希望の時は次のように。
+* スタートイメージ、エンドイメージは gif, png, jpg でも OK とする。
+
+* 10 ステップ以外、例えば 20 ステップ行きたい時は次のように。
 
 ```sh
-  $ blendy 20 start.jpg end.jpg
+$ racket blendy.rkt 20 start.jpg end.jpg
 ```
-
-## note
-
-処理速度無視の単純３重ループ。RGB 分解もループと考えると４重だな。
-ま、遅いです。
 
 ## build
 
-blendy.rkt のあるフォルダに移動し、
-racket インタプリタで以下のように呼び出す。
+racket には racket インタプリタを必要とせず、
+スタンドアロンで実行できるオブジェクトを生成する機能がある。
+リテラシーのレベルではこの文章を理解するのは無理だよね。言い換えよう。
 
-```
-  $ racket blendy.rkt from.png to.png
-```
+racket インタプリタを持たない人に、
+blendy をコピーしてプレゼントするにはこうする。
 
-~/bin 等に置いておくスタンドアロンのコマンドがほしい場合は、
-raco exe でビルドする。
+作業ディレクトリを src に合わせて、
 
 ```sh
-  $ raco exe blendy.rkt
-  $ mv blendy ~/bin
+$ raco exe blendy.rkt
 ```
 
-こうすると、作業ディレクトリがどこであっても blendy を起動できるようになる。
-
-ビルドした blendy は起動のために racket インタプリタを必要としない。
+出来上がる blendy (拡張子 .rkt がなくなっていることに注意）
+は racket をインストールしていない ubuntu でも起動できる。
 racket をインストールしてない隣人に blendy だけコピーしてあげれば、
 その隣人は自分の ubuntu で blendy を起動できるようになる。
-intel-linux であれば ubuntu じゃなくても起動できる（と思う、未確認）。
+
+moodle に置いたのはこれです。
+
+## path を通す
+
+* ~/bin というフォルダを作り、
+* その中に、blendy と png-to-gif.sh をコピーする。
+* ubuntu が ~/bin 中の blendy と png-to-gif.sh を発見できるようにする。
+
+```sh
+$ mkdir ~/bin
+$ cp blendy png-to-gif.sh ~/bin
+$ source ~/.profile
+```
+
+こうすると、作業ディレクトリがどこであっても
+blendy や png-to-gif.sh を起動できるようになる。
+mkdir や cp, source は一度実行すればよく、
+ubuntu をリブートしても効果は持続します。
+ubuntu はログイン時に ~/bin があったらそれを PATH に追加する。
+source はログアウト/ログインせず、PATH に ~/bin を追加する
+（ログイン時に読み込むはずの ~/.profile を現シェルで読み込む。
+もちろん、
+~/.profile には ~/bin を PATH に追加するコードが定義されている）。
 
 ## demo
 
 images/フォルダに cat.png、virus.png 置いてある。
 いずれも mac の絵文字をキャプチャしたもの。
+
 ターミナルで以下のようにコマンドを実行すると
 cat.png から virus.png へモルフィングする anime.gif を自動作成し、
 ubuntu のブラウザ firefox でそれを開く。
 
 ```sh
 $ rm -f *.gif
-$ racket blendy.rkt ../images/cat.png ../images/virus.png
-$ ./png-to-gif.sh
+$ blendy ../images/cat.png ../images/virus.png
+$ png-to-gif.sh
 $ gifsicle --colors 256 -l10 *.gif -o anime.gif
 $ firefox anime.gif
 ```
 png-to-gif.sh の中身は、、、ファイル開いて読んでみよう。
 
-run.sh は上の操作をファイルに記録したもの。
+上の操作を run0.sh にコピーしよう（$ は剥ぎ取る必要あり）。
 
 ```sh
-$ ./run.sh
+$ ./run0.sh
 ```
 
 で、何回でも繰り返せる。
 
-もしくは、次の１行で。
+run0.sh は cat.png と virus.png を決め打ちで入力にしているのを、
+ターミナルからコマンドを打つときに指定できるように変更しよう。blendy.sh です。
+どこがどう変わったかをチェックしよう。
+
+... と書いても見ないやついるからな。出来上がり run.sh をコピペします。
 
 ```sh
-$ make clean all
+#!/bin/sh
+# usage:
+# $ ./blandy.sh im1 im2 out
+# example:
+# $ ./blendy.sh dog.png bird.png anime.gif
+
+rm -f *.gif
+blendy $1 $2
+png-to-gif.sh
+gifsicle --colors 256 -l3 *.gif -o $3
+firefox $3
 ```
+
+作ったプログラムを飲み込んだ、さらに便利なプログラムを作ってみた。
 
 ## Legal
 
