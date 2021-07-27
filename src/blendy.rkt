@@ -95,7 +95,7 @@
          ((= 3 argc) (blend-n (string->number (vector-ref args 0))
                               (vector-ref args 1)
                               (vector-ref args 2)))
-         (else (printf "usage: blendy [n] im-a im-b"))))))
+         (else (printf "usage: blendy [n] im-a im-b\n"))))))
 
 ;; 本番。ターミナルからの起動は、
 ;; blendy a.png b.png

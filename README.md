@@ -31,6 +31,21 @@ $ racket blendy.rkt 20 start.jpg end.jpg
 
 ## build
 
+### warning - 2021-07-26
+
+raco exe 単独ではスタンドアロンのアプリを作成できない。
+
+```sh
+$ raco distribute dir app.exe
+```
+を実行後、dir に作成される
+dir/app/app と dir/lib/racket3m-version を適切なパスに配置する必要がある。
+ほんとか？
+ほんとだったら、raco exe でスタンドアロンアプリを作成できるってのは嘘。
+看板に偽りあり！
+
+### must be rewritten
+
 racket には racket インタプリタを必要とせず、スタンドアロンで実行できるオブジェクトを
 生成する機能がある。リテラシーのレベルではこの文章を理解するのは無理だよね。言い換えよう。
 
