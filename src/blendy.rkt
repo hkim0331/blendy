@@ -11,14 +11,14 @@
 
 ;; イメージ im の位置 (x,y) のピクセルを得る。
 (define get-px
-  (lambda (x y im)
+  (lambda (im x y)
     (let ((px (make-bytes 4)))
       (send im get-argb-pixels x y 1 1 px)
       px)))
 
 ;; イメージ im の位置 (x,y) のピクセルを px で書き換える。
 (define put-px!
-  (lambda (px x y im)
+  (lambda (im x y px)
     (send im set-argb-pixels x y 1 1 px)))
 
 ;; このプログラムの中心的関数。
@@ -34,8 +34,8 @@
                            n))))
       p)))
 
-;; 01.gif, 02.gif,のようなファイル名を作る。
-;; 100 ステップ以上には対応しないよ。そんなアニメは無用だろ。
+;; 01.gif, 02.gif,,, のようなファイル名を作る。
+;; 100 ステップ以上には対応しない。そんな GIF アニメは無用だろ。
 (define name
   (lambda (i n)
     (if (< i 10)
@@ -73,10 +73,10 @@
       (for ([i (range n)])
         (for ([y (range height)])
           (for ([x (range width)])
-            (set! px-a (get-px x y im-a))
-            (set! px-b (get-px x y im-b))
+            (set! px-a (get-px im-a x y))
+            (set! px-b (get-px im-b x y))
             (set! px-c (moving-average i n px-a px-b))
-            (put-px! px-c x y im-c)))
+            (put-px! im-c x y px-c)))
         (send im-c save-file (name i n) 'png)))))
 
 ;; テスト。racket いいねー。

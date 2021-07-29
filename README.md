@@ -36,12 +36,13 @@ $ racket blendy.rkt 20 start.jpg end.jpg
 raco exe 単独ではスタンドアロンのアプリを作成できない。
 
 ```sh
-$ raco distribute dir app.exe
+$ raco exe blendy.rkt
+$ raco distribute dir blendy
 ```
 を実行後、dir に作成される
-dir/app/app と dir/lib/racket3m-version を適切なパスに配置する必要がある。
+dir/bin/blendy と dir/lib/racket3m-version を適切なパスに配置する必要がある。
 ほんとか？
-ほんとだったら、raco exe でスタンドアロンアプリを作成できるってのは嘘。
+ほんとだったら、raco exe でスタンドアロンアプリを作成できるってのはやや嘘だなあ。
 看板に偽りあり！
 
 ### must be rewritten
