@@ -16,6 +16,7 @@ github あたりに公開する。
 
 ## Unrelease
 
+
 ## - 2021-07-19
 ### Changed
 - exe とシェルスクリプトを ~/bin にインストールで。README.md を書き換える。
