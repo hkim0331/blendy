@@ -31,9 +31,24 @@ $ racket blendy.rkt 20 start.jpg end.jpg
 
 ## build
 
-racket には racket インタプリタを必要とせず、
-スタンドアロンで実行できるオブジェクトを生成する機能がある。
-リテラシーのレベルではこの文章を理解するのは無理だよね。言い換えよう。
+### warning - 2021-07-26
+
+raco exe 単独ではスタンドアロンのアプリを作成できない。
+
+```sh
+$ raco exe blendy.rkt
+$ raco distribute dir blendy
+```
+を実行後、dir に作成される
+dir/bin/blendy と dir/lib/racket3m-version を適切なパスに配置する必要がある。
+ほんとか？
+ほんとだったら、raco exe でスタンドアロンアプリを作成できるってのはやや嘘だなあ。
+看板に偽りあり！
+
+### must be rewritten
+
+racket には racket インタプリタを必要とせず、スタンドアロンで実行できるオブジェクトを
+生成する機能がある。リテラシーのレベルではこの文章を理解するのは無理だよね。言い換えよう。
 
 racket インタプリタを持たない人に、
 blendy をコピーしてプレゼントするにはこうする。
@@ -84,26 +99,26 @@ ubuntu のブラウザ firefox でそれを開く。
 
 ```sh
 $ rm -f *.gif
-$ blendy ../images/cat.png ../images/virus.png
-$ png-to-gif.sh
+$ racket blendy.rkt ../images/cat.png ../images/virus.png
+$ sh png-to-gif.sh
 $ gifsicle --colors 256 -l10 *.gif -o anime.gif
 $ firefox anime.gif
 ```
 png-to-gif.sh の中身は、、、ファイル開いて読んでみよう。
 
-上の操作を run0.sh にコピーしよう（$ は剥ぎ取る必要あり）。
+上の操作を blendy-0.sh にコピーしよう（$ は剥ぎ取る必要あり）。
 
 ```sh
-$ ./run0.sh
+$ sh blendy-0.sh
 ```
 
 で、何回でも繰り返せる。
 
-run0.sh は cat.png と virus.png を決め打ちで入力にしているのを、
-ターミナルからコマンドを打つときに指定できるように変更しよう。blendy.sh です。
+blendy-o.sh は cat.png と virus.png を決め打ちで入力にしているのを、
+ターミナルからコマンドを打つときに指定できるように変更し、blendy.sh とする。
 どこがどう変わったかをチェックしよう。
 
-... と書いても見ないやついるからな。出来上がり run.sh をコピペします。
+... と書いても見ないやついるからな。出来上がり blendy.sh をコピペします。
 
 ```sh
 #!/bin/sh
@@ -113,8 +128,8 @@ run0.sh は cat.png と virus.png を決め打ちで入力にしているのを�
 # $ ./blendy.sh dog.png bird.png anime.gif
 
 rm -f *.gif
-blendy $1 $2
-png-to-gif.sh
+racket blendy.racket $1 $2
+sh png-to-gif.sh
 gifsicle --colors 256 -l3 *.gif -o $3
 firefox $3
 ```

@@ -13,6 +13,11 @@ github あたりに公開する。
 
 ## Unrelease
 
+## 0.2.1 - 2021-07-29
+### Changed
+- blendy.rkt get-px, put-px! イメージを第一引数に取るように変更。
+- ./ を使わず、sh でスクリプトを呼び出す。
+
 ## - 2021-07-19
 ### Changed
 - exe とシェルスクリプトを ~/bin にインストールで。README.md を書き換える。
