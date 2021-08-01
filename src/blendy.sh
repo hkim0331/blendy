@@ -6,8 +6,9 @@
 
 convert $1 -resize '240x240!' left.png
 convert $2 -resize '240x240!' right.png
-./blendy left.png right.png
 rm -f *.gif
-./png-to-gif.sh
+racket blendy.rkt left.png right.png
+rm left.png right.png
+sh png-to-gif.sh
 gifsicle --colors 256 -l3 *.gif -o $3
-firefox $3
+#firefox $3
